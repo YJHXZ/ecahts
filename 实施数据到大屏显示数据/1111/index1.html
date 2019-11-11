@@ -1,0 +1,497 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<!-- <meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" /> -->
+		<title></title>
+	</head>
+	<style type="text/css">
+		#graphical {
+			width: 100%;
+			height: 89vh;
+		}
+	</style>
+	<body>
+
+
+		<div id="graphical">
+		</div>
+		<script src="echarts.min.js" type="text/javascript" charset="utf-8"></script>
+		<script type="text/javascript">
+			var jsonTest1 = {
+				'dataX': ['4时', '6时', '8时', '10时', '12时', '14时', '16时', '18时', '20时'],
+				'dataY': [148, 166, 100, 200, 173, 168, 318, 186, 150],
+			};
+			var jsonTest2 = {
+				'dataX': ['鲜肉类', '海鲜水产', '蔬菜类', '禽蛋兽类', '粮油类', '肉菜加工', '素食品', '其他类'],
+				'dataY': [{
+						value: 335,
+						name: '鲜肉类'
+					},
+					{
+						value: 310,
+						name: '粮油类'
+					},
+					{
+						value: 234,
+						name: '海鲜水产'
+					},
+					{
+						value: 135,
+						name: '肉菜加工'
+					},
+					{
+						value: 1548,
+						name: '蔬菜类'
+					},
+					{
+						value: 1548,
+						name: '素食品'
+					},
+					{
+						value: 1548,
+						name: '禽蛋兽类'
+					},
+					{
+						value: 1548,
+						name: '其他类'
+					}
+				],
+			};
+			var jsonTest3 = {
+				'dataX': ['4时', '6时', '8时', '10时', '12时', '14时', '16时', '18时', '20时', '22时'],
+				'dataY': [3800, 4900, 4300, 3300, 3200, 3100, 4500, 4000, 5000, 4000]
+			};
+			var jsonTest4 = {
+				'dataX': ['陈董桥', '李聪圣', '许阿三', '刘聪强', '温伟亮', '赵铮铮'],
+				'dataY': [2000, 1500, 1300, 1000, 950, 920]
+			}
+			var jsonTest5 = {
+				'dataX': [235, 368, 389, 421, 421, 582, 753, 960],
+				'dataY': ['斑鱼', '肥牛', '小黄鱼', '红豆', '牛舌', '毛豆', '胡罗卜', ' 花菜']
+			}
+			// doCreateChart('今日客流总数',jsonTest1);
+			//			doCreateChart('畅销分类',jsonTest2);
+			//			 doCreateChart('交易趋势',jsonTest3);
+			// doCreateChart('商户榜', jsonTest4);
+			// doCreateChart('畅销商品',jsonTest5);
+			//今日客流总数
+			function doCreateChart(str, data) {
+				var line = echarts.init(document.getElementById('graphical'));
+				option = {
+					xAxis: {
+						type: 'category',
+						boundaryGap: false,
+						data: data.dataX,
+						axisLine: {
+							show: false,
+						},
+						axisTick: {
+							show: false
+						},
+						axisLabel: {
+							color: '#fff',
+							fontSize: 8
+						}
+					},
+					yAxis: {
+						type: 'value',
+						axisLabel: {
+							show: false
+						},
+						axisLine: {
+							show: false
+						},
+						splitLine: {
+							show: false
+						},
+						axisTick: {
+							show: false
+						}
+					},
+					grid: {
+						top: 100,
+						left: 20,
+						right: 20,
+						bottom: 35
+					},
+					series: [{
+						data: data.dataY,
+						type: 'line',
+						symbolSize: 12,
+						symbol: 'circle',
+						smooth: true,
+						areaStyle: {
+							normal: {
+								color: '#0d71e5'
+							}
+						},
+						itemStyle: {
+							normal: {
+								color: '#ffdc34', //改变折线点的颜色
+
+								lineStyle: {
+									color: '#3fc5f0' //改变折线颜色
+								}
+							}
+						}
+					}]
+				};
+
+				//畅销分类
+				option1 = {
+					tooltip: {
+						trigger: 'item',
+						formatter: "{a} <br/>{b}: {c} ({d}%)"
+					},
+					legend: {
+						textStyle: {
+							color: "#fff",
+							fontSize: 8
+						},
+						itemWidth: 20, // 设置宽度
+
+						itemHeight: 15, // 设置高度
+
+						itemGap: 15, // 设置间距
+						right: 20, // 左距离
+						top: 20, // 上距离
+						bottom: 20, // 下距离
+						width: 300, // 宽度
+						height: 130,
+						orient: 'vertical',
+						// x: 'right',
+						align: 'left',
+						// y: '20%',
+						formatter: function(name) {
+							// 获取legend显示内容
+							var data = option1.series[0].data;
+							var total = 1;
+							var tarValue = 0;
+							for (var i = 0, l = data.length; i < l; i++) {
+								total += data[i].value;
+								if (data[i].name == name) {
+									tarValue = data[i].value;
+								}
+							}
+							var p = (tarValue / total * 100).toFixed(2);
+							parseInt(p);
+							return name + ' ' + ' ' + p + '%';
+						},
+						data: data.dataX
+					},
+
+					series: [{
+						name: '访问来源',
+						type: 'pie',
+						radius: ['50%', '70%'],
+						center: ['30%', '50%'],
+						avoidLabelOverlap: false,
+						label: {
+							normal: {
+								show: false,
+								position: 'center'
+							},
+						},
+						labelLine: {
+							normal: {
+								show: false
+							}
+						},
+						itemStyle: {
+							normal: {
+								color: function(params) {
+									//自定义颜色
+									var colorList = [
+										'#F18082', '#FF5050', '#E4D115', '#02A6B5', '#56EA61', '#8639A4', '#DB6EFF', '#5BAFED'
+									]
+									return colorList[params.dataIndex]
+								}
+							}
+						},
+						data: data.dataY,
+					}]
+				}
+
+				//交易趋势
+				option2 = {
+					xAxis: {
+						type: 'category',
+						boundaryGap: false,
+						data: data.dataX,
+						axisLine: {
+							lineStyle: {
+								color: '#0090FF'
+							}
+						},
+						axisTick: {
+							show: false
+						},
+						axisLabel: {
+							color: '#fff', //调节颜色字体,x轴
+							fontSize: 1
+						},
+					},
+					grid: {
+						top: 40,
+						left: 40,
+						bottom: 30,
+						right: 40,
+					},
+					yAxis: [{
+						type: 'value',
+						axisLine: {
+							lineStyle: {
+								color: '#0170e5'
+							}
+						},
+						axisLabel: {
+							color: '#ffdc34',
+							fontSize: 8
+						},
+						axisTick: {
+							show: false
+						},
+						splitLine: {
+							show: false
+						}
+					}, {
+						axisLine: {
+							lineStyle: {
+								color: '#0170e5'
+							}
+						},
+
+					}],
+					series: [{
+						data: data.dataY,
+						type: 'line',
+						symbolSize: 6,
+						// symbol: 'circle',
+						smooth: true,
+						areaStyle: {
+							normal: {
+								color: '#00FF13'
+							}
+						},
+						itemStyle: {
+							normal: {
+								color: '#0170e5', //改变折线点的颜色
+
+								lineStyle: {
+									color: '#0170e5' //改变折线颜色
+								}
+							}
+						}
+					}]
+				};
+
+				//商户榜
+				option3 = {
+					color: ['#3398DB'],
+					tooltip: {
+						trigger: 'axis',
+						axisPointer: { // 坐标轴指示器，坐标轴触发有效
+							type: 'shadow' // 默认为直线，可选为：'line' | 'shadow'
+						}
+					},
+					legend: {
+						data: ['近七天交易数'],
+						icon: "rect",
+						itemWidth: 10, // 设置宽度
+						itemHeight: 10,
+						x: 'right',
+
+						textStyle: {
+							fontSize: 10, //字体大小
+							color: '#ffffff' //字体颜色
+						},
+
+
+					},
+					grid: {
+						left: '3%',
+						right: '4%',
+						bottom: '4%',
+						top: 30,
+						containLabel: true
+					},
+					xAxis: [{
+						type: 'category',
+						data: data.dataX,
+						axisTick: {
+							show: false
+						},
+						axisLine: {
+							show: false
+						},
+						axisLabel: {
+							textStyle: {
+								color: '#fff',
+								fontSize: 8
+							}
+						}
+					}],
+					grid: {
+						top: 40,
+						bottom: 30,
+						left: 1,
+						right: 20
+					},
+					yAxis: [{
+						type: 'value',
+						axisLabel: {
+							show: false
+						},
+						axisLine: {
+							show: false
+						},
+						axisTick: {
+							show: false
+						},
+						splitLine: {
+							show: false
+						}
+					}],
+					series: [{
+						name: '近七天交易数',
+						type: 'bar',
+						barWidth: '25%',
+						data: data.dataY,
+						itemStyle: {
+							normal: {
+								//柱形图圆角，初始化效果
+
+								barBorderRadius: [20, 20, 20, 20],
+								color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [{
+									offset: 0,
+									color: '#F2F4B3'
+								}, {
+									offset: 1,
+									color: '#D1FE99'
+								}]),
+								label: {
+									formatter: "{c}",
+									show: true,
+									position: 'top',
+									textStyle: {
+										fontWeight: 'bolder',
+										fontSize: '8',
+										fontFamily: '微软雅黑',
+										color: "#fff"
+									}
+								}
+							}
+						}
+					}]
+				}
+
+				option4 = {
+					tooltip: {
+						trigger: 'axis'
+					},
+					grid: {
+						left: '1%',
+						right: '8%',
+						bottom: '9%',
+						top: "20%",
+						containLabel: true
+					},
+					xAxis: [{
+						type: 'value',
+						boundaryGap: [0, 0.01],
+						axisLabel: {
+							textStyle: {
+								fontSize: 4,
+								color: '#fff'
+							}
+						},
+						axisLine: {
+
+							lineStyle: {
+								color: '#1d566e'
+							}
+						},
+						axisTick: {
+							show: false
+						},
+						splitLine: {
+							lineStyle: {
+
+								color: '#1d566e'
+							}
+						}
+					}],
+					grid: {
+						top: 20,
+						bottom: 20,
+						left: 35,
+						right: 20
+					},
+					yAxis: [{
+						type: 'category',
+						data: data.dataY,
+						axisTick: { //y轴刻度线
+							show: false
+						},
+						axisLabel: {
+							textStyle: {
+								fontSize: 3,
+								color: '#ffffff'
+							}
+						},
+						axisLine: {
+							show: false,
+							lineStyle: {
+								color: '#DDD'
+							}
+						},
+					}],
+					series: [{
+						type: 'bar',
+						barCategoryGap: '30%',
+						barWidth: '45%',
+						itemStyle: {
+							normal: {
+								color: function(params) {
+									var colorList = ['#8639A4', '#B15C82', '#11A653', '#FF5050', '#FF9B59', '#DB6EFF', '#007EC3', '#02A6B5'];
+									return colorList[params.dataIndex];
+								},
+								barBorderRadius: 30,
+								label: {
+									formatter: "{c}",
+									show: true,
+									position: 'right',
+									textStyle: {
+										fontWeight: 'bolder',
+										fontSize: '12',
+										fontFamily: '微软雅黑',
+										color: "#fff"
+									}
+								}
+
+							}
+
+						},
+						data: data.dataX
+					}],
+				};
+
+				if (str == '今日客流总数') {
+					line.setOption(option);
+				} else if (str == '畅销分类') {
+					line.setOption(option1);
+				} else if (str == '交易趋势') {
+					line.setOption(option2);
+				} else if (str == '商户榜') {
+					line.setOption(option3);
+				} else if (str == '畅销商品') {
+					line.setOption(option4);
+				}
+				window.onresize = function() {
+					line.resize();
+				}
+			}
+		</script>
+	</body>
+</html>
